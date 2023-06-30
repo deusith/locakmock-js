@@ -7,11 +7,13 @@ import Link from 'next/link';
 import { STATUS_LIST } from '@/utils/constants';
 
 const NewPage = () => {
+
+  // User Entered data -- todo rename this shit.
   const [endpointPath, setEndpointPath] = useState('mmipath');
   const [formFields, setFormFields] = useState([{
     status: 200,
     data: {
-      dasName: 'Ricardo',
+      dasName: 'Ricardooooooo',
       dasLastName: 'Fernandez'
     },
   }]);
@@ -26,10 +28,18 @@ const NewPage = () => {
 
   const submitHanlder = async (event) => {
     event.preventDefault();
+    let endpointData = {};
+
+    formFields.forEach((field) => {
+      endpointData[field.status] = field.data;
+    });
+
+    console.log(formFields)
+
     axios
       .post(
         '/api/new',
-        { endpointPath, formFields },
+        { endpointPath, endpointData },
       )
       .then(res => console.log(res));
   };
@@ -46,7 +56,6 @@ const NewPage = () => {
           value={endpointPath} />
         {
           formFields.map((row, index) => {
-            console.log(row);
             return (
               <div style={{ margin: '50px' }} key={`row-${index}`}>
                 <select name="status" value={row.status} row={index} onChange={onChange}>
