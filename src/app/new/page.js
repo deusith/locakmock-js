@@ -14,10 +14,12 @@ const NewPage = () => {
     status: undefined,
     data: undefined,
   }]);
-  
+
   const [isJsonValid, setIsJsonValid] = useState(true);
   const oneGroupForEachStatus = statusFields.length === STATUS_LIST.length;
-  
+
+  const enpointPathRegex = /^[A-Za-z0-9 ]*$/;
+
   // Temporal styles object
   const textAreaStyle = {
     outline: isJsonValid ? 'unset' : '2px solid red'
@@ -76,20 +78,67 @@ const NewPage = () => {
     });
   };
 
-  const submitHanlder = async (event) => {
-    event.preventDefault();
-    let endpointData = {};
+  const isFormValid = () => {
+    /**
+     * Condiciones para validez:
+     * 1) enpoinpath con datos [a-zA-Z0-9] ✅
+     * 2) todos los status seleccionados ✅
+     * 2.5) y no duplicados ✅
+     * 3) todos los response data con json válidos ✅
+     */
 
-    statusFields.forEach((field) => {
-      endpointData[field.status] = field.data;
+    // 1)
+    const isPathValid = enpointPathRegex.test(endpointPath)
+      && endpointPath.length > 0;
+
+    // 2) && 3)
+    let areAllStatusValid = true;
+    let isAllDataValid = true;
+    let noStatusDuplicated = true;
+    let usedStatus = [];
+
+    statusFields.forEach((field, index) => {
+      if (field.status === undefined) {
+        areAllStatusValid = false;
+      }
+      
+      try {
+        JSON.parse(field.data);
+      } catch {
+        isAllDataValid = false;
+      }
+      
+      if (field.data === undefined || field.data?.length === 0) {
+        isAllDataValid = false;
+      }
+
+      if(usedStatus.includes(field.status)) {
+        noStatusDuplicated = false;
+      }
+
+      usedStatus.push(field.status)
     });
 
-    axios
-      .post(
-        '/api/new',
-        { endpointPath, endpointData },
-      )
-      .then(res => console.log(res));
+    return isPathValid && areAllStatusValid && isAllDataValid && noStatusDuplicated;
+  };
+
+  const submitHanlder = async (event) => {
+    event.preventDefault();
+
+    if(isFormValid()) {
+      let endpointData = {};
+  
+      statusFields.forEach((field) => {
+        endpointData[field.status] = field.data;
+      });
+  
+      axios
+        .post(
+          '/api/new',
+          { endpointPath, endpointData },
+        )
+        .then(res => console.log(res));
+    }
   };
 
   return (
@@ -136,7 +185,7 @@ const NewPage = () => {
           })
         }
 
-        <button type="submit" disabled={!isFormValid}>Guardarks</button>
+        <button type="submit">Guardarks</button>
       </form>
     </>
   );
