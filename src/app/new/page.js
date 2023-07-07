@@ -10,12 +10,13 @@ const NewPage = () => {
 
   // User Entered data -- todo rename this shit.
   const [endpointPath, setEndpointPath] = useState('');
-  const [formFields, setFormFields] = useState([{
+  const [statusFields, setStatusFields] = useState([{
     status: undefined,
     data: undefined,
   }]);
+  
   const [isJsonValid, setIsJsonValid] = useState(true);
-  const oneGroupForEachStatus = formFields.length === STATUS_LIST.length;
+  const oneGroupForEachStatus = statusFields.length === STATUS_LIST.length;
   
   // Temporal styles object
   const textAreaStyle = {
@@ -25,7 +26,7 @@ const NewPage = () => {
   // Creates a new status group for another status
   const addNewStatusGroup = (event) => {
     event.preventDefault();
-    setFormFields((prevState) => {
+    setStatusFields((prevState) => {
       const newState = oneGroupForEachStatus
         ? prevState
         : [...prevState, {
@@ -40,7 +41,7 @@ const NewPage = () => {
   const removeStatusGroup = (event) => {
     event.preventDefault();
     const row = Number(event.target.dataset.row);
-    setFormFields(
+    setStatusFields(
       (prevState) => prevState.filter((e, index) => index !== row)
     );
   };
@@ -51,11 +52,11 @@ const NewPage = () => {
   }
 
   // Changes the data for each status object
-  const changeStatusHanlder = (event) => {
+  const changeFormDataHanlder = (event) => {
     const row = event.target.dataset.row;
     const name = event.target.name;
     const value = event.target.value;
-    setFormFields((prevState) => {
+    setStatusFields((prevState) => {
       const newState = [...prevState];
       if (name === 'status') {
         newState[row].status = value;
@@ -79,11 +80,9 @@ const NewPage = () => {
     event.preventDefault();
     let endpointData = {};
 
-    formFields.forEach((field) => {
+    statusFields.forEach((field) => {
       endpointData[field.status] = field.data;
     });
-
-    console.log(formFields)
 
     axios
       .post(
@@ -104,16 +103,16 @@ const NewPage = () => {
           name="endpointPath"
           value={endpointPath} />
         {
-          formFields.map((row, index) => {
+          statusFields.map((row, index) => {
             return (
               <div style={{ margin: '50px' }} key={`row-${index}`}>
-                <select name="status" value={row.status} data-row={index} onChange={changeStatusHanlder}>
+                <select name="status" value={row.status} data-row={index} onChange={changeFormDataHanlder}>
                   <option value="">select status</option>
                   {STATUS_LIST.map(status => <option value={status} key={status}>{status}</option>)}
                 </select>
                 <br />
                 <textarea
-                  onChange={changeStatusHanlder}
+                  onChange={changeFormDataHanlder}
                   data-row={index}
                   name="data"
                   placeholder="Response Data"
@@ -128,7 +127,7 @@ const NewPage = () => {
                 <button
                   data-row={index}
                   onClick={removeStatusGroup}
-                  disabled={formFields.length === 1}>
+                  disabled={statusFields.length === 1}>
                   Remove Status
                 </button>
                 <hr />
@@ -137,7 +136,7 @@ const NewPage = () => {
           })
         }
 
-        <button type="submit">Guardark</button>
+        <button type="submit" disabled={!isFormValid}>Guardarks</button>
       </form>
     </>
   );
