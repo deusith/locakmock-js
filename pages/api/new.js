@@ -29,6 +29,7 @@ export default async function handler(req, res) {
 
   if (existsSync(ENDPOINT_DIRECTORY)) {
     try {
+      console.log(`${ENDPOINT_DIRECTORY}/${endpointPath}.json`);
       writeFileSync(`${ENDPOINT_DIRECTORY}/${endpointPath}.json`, JSON.stringify(endpointData));
       responseStatus = 200;
       responseData = { message: 'Endpoint created succesfully!'};
