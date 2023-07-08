@@ -129,7 +129,7 @@ const NewPage = () => {
       let endpointData = {};
   
       statusFields.forEach((field) => {
-        endpointData[field.status] = field.data;
+        endpointData[field.status] = JSON.parse(field.data);
       });
   
       axios
