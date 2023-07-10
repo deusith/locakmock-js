@@ -32,7 +32,13 @@ const Homepage = async () => {
           : (
             <ul>
               {
-                endpointList.map((ep) => <li>{ep}</li>)
+                endpointList.map((ep) => (
+                  <li key={ep}>
+                    {ep}
+                    &nbsp;
+                    <Link href={`edit/${ep.replace('.json', '')}`} >Editar</Link>
+                  </li>
+                ))
               }
             </ul>
           )

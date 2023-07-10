@@ -28,7 +28,6 @@ export default async function handler(req, res) {
     }
   }
 
-  // console.log(req.headers);
   res.status(responseStatus).json({
     message: responseMessage,
     data: responseData,
