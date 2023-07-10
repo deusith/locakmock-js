@@ -5,7 +5,13 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+Minimum requirements:
+
+NodeJS 18.16.1
+Next 13.4.7
+React 18.2
+
+Run the development server:
 
 ```bash
 npm run dev
@@ -15,23 +21,28 @@ yarn dev
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3030](http://localhost:3030) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Managing endpoints
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+The list of avaliable endpoints is in the root of the server [http://localhost:3030](http://localhost:3030)
 
-## Learn More
+To add one endpoint, go to [http://localhost:3030/new](http://localhost:3030/new) and fill up the blanks. 
 
-To learn more about Next.js, take a look at the following resources:
+If the "create" button doesnt work, check for any blank fields.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+There's no `edit` option. To modify an existing endpoint we have to use the "new" interface. You can copy and paste the data from the `./endpoints` directory to the new endpoint form or directly modify the json file created. This feature has priority over the others and will be released in the future.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+To delete an endpoint, you also have to delete the corresponding file in the `./endpoints` directory.
 
-## Deploy on Vercel
+## Accesing the mock API
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+To access any previously created endpoint, point your REST client or JavaScript calls to the following URL. Currently only `GET` requests have been tested.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[http://localhost:3030/api/v0/{your-endpoint-name}](http://localhost:3030/api/v0/{your-endpoint-name})
+
+To request a specific dataset other than `200 ok` status add the following header to your request:
+
+`"x-custom-status" : status-number`
+
+where `status-number` can be any of the values listed in the new endpoint page (200, 400, 404, 500, etc)
