@@ -22,9 +22,9 @@ const buildStatusGroupsFromData = (endpointData) => {
 
 const EndpointForm = ({ editData }) => {
   // User Entered data
-  const [endpointPath, setEndpointPath] = useState(editData.endpointPath || '');
+  const [endpointPath, setEndpointPath] = useState(editData?.endpointPath || '');
   const [statusFields, setStatusFields] = useState(
-    editData.endpointData
+    editData?.endpointData
       ? buildStatusGroupsFromData(editData.endpointData)
       : [DEFAULT_GROUP_STRUCTURE]
   );
