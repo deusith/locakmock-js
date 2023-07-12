@@ -1,5 +1,4 @@
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
-import path from 'path';
 
 import { ENDPOINT_DIRECTORY } from '@/utils/constants';
 

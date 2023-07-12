@@ -28,8 +28,9 @@ export default async function handler(req, res) {
     }
   }
 
-  res.status(responseStatus).json({
-    message: responseMessage,
-    data: responseData,
-  });
+  res.status(responseStatus).json(responseData);
+  // res.status(responseStatus).json({
+  //   message: responseMessage,
+  //   data: responseData,
+  // });
 };
